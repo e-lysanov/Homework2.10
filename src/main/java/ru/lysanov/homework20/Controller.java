@@ -1,12 +1,12 @@
 package ru.lysanov.homework20;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.lysanov.homework20.exceptions.SecondValueIsZeroException;
+import ru.lysanov.homework20.exceptions.SomeValueIsNullException;
 
 @RestController
-@RequestMapping(path = "/calculator")
 public class Controller {
 
     private final CalculatorService calculatorService;
@@ -25,10 +25,12 @@ public class Controller {
             @RequestParam(name = "num1", required = false) Integer num1,
             @RequestParam(name = "num2", required = false) Integer num2
     ) {
-        if (num1 == null || num2 == null) {
-            return "<b>Отсутствуют входные значения!</b>";
+        try {
+            return calculatorService.summ(num1, num2);
+        } catch (SomeValueIsNullException exception) {
+            exception.printStackTrace();
+            return "Отсуствуют входные значения!";
         }
-        return calculatorService.summ(num1, num2);
     }
 
     @GetMapping (path = "/minus")
@@ -36,10 +38,12 @@ public class Controller {
             @RequestParam(name = "num1", required = false) Integer num1,
             @RequestParam(name = "num2", required = false) Integer num2
     ) {
-        if (num1 == null || num2 == null) {
-            return "<b>Отсутствуют входные значения!</b>";
+        try {
+            return calculatorService.subtraction(num1, num2);
+        } catch (SomeValueIsNullException exception) {
+            exception.printStackTrace();
+            return "Отсуствуют входные значения!";
         }
-        return calculatorService.subtraction(num1, num2);
     }
 
     @GetMapping (path = "/multiply")
@@ -47,10 +51,12 @@ public class Controller {
             @RequestParam(name = "num1", required = false) Integer num1,
             @RequestParam(name = "num2", required = false) Integer num2
     ) {
-        if (num1 == null || num2 == null) {
-            return "<b>Отсутствуют входные значения!</b>";
+        try {
+            return calculatorService.multiplication(num1, num2);
+        } catch (SomeValueIsNullException exception) {
+            exception.printStackTrace();
+            return "Отсуствуют входные значения!";
         }
-        return calculatorService.multiplication(num1, num2);
     }
 
     @GetMapping (path = "/divide")
@@ -58,11 +64,14 @@ public class Controller {
             @RequestParam(name = "num1", required = false) Integer num1,
             @RequestParam(name = "num2", required = false) Integer num2
     ) {
-        if (num1 == null || num2 == null) {
-            return "<b>Отсутствуют входные значения!</b>";
-        } else if (num2 == 0) {
-            return "<b>На ноль делить запрещено!</b>";
+        try {
+            return calculatorService.divide(num1, num2);
+        } catch (SomeValueIsNullException exception) {
+            exception.printStackTrace();
+            return "Отсуствуют входные значения!";
+        } catch (SecondValueIsZeroException exception) {
+            exception.printStackTrace();
+            return "На ноль делить нельзя!";
         }
-        return calculatorService.divide(num1, num2);
     }
 }
