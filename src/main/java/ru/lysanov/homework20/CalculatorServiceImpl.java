@@ -19,6 +19,7 @@ public class CalculatorServiceImpl implements CalculatorService {
         }
         int summResult = num1 + num2;
         return num1 + " + " + num2 + " = " + summResult;
+//        return summResult;
     }
 
     @Override
